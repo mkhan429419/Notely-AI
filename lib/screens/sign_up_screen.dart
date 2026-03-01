@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'login_screen.dart';
+import 'dashboard_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -39,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: const Text(
           'Sign up',
           style: TextStyle(
-            color: Color(0xFF6B46C1), // Dark purple
+            color: Colors.black87, // Match dashboard heading color
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -284,8 +285,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Handle sign up logic here
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Sign up successful!')),
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => const DashboardScreen()),
                       );
                     }
                   },
@@ -301,8 +302,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     elevation: WidgetStateProperty.all(0),
                     overlayColor: WidgetStateProperty.resolveWith<Color>(
                       (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.hovered)) {
-                          return const Color(0xFF8B5CF6); // Slightly darker purple on hover
+                        if (states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)) {
+                          return const Color(0xFF8B5CF6); // Slightly darker purple on hover/press
                         }
                         return Colors.transparent;
                       },
