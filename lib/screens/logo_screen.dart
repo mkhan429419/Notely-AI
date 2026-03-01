@@ -25,7 +25,7 @@ class _LogoScreenState extends State<LogoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9F8FD),
       body: SafeArea(
         child: Center(
           child: Padding(

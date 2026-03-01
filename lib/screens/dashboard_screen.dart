@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'edit_task_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -64,10 +65,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return _allNotes;
   }
 
+  void _openEdit(Map<String, dynamic> note) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditTaskScreen(note: note),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9F8FD),
       body: SafeArea(
         child: Column(
           children: [
@@ -133,12 +142,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   const SizedBox(height: 20),
                   // Filter Tabs
-                  Row(
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
                     children: [
                       _buildFilterTab('All', _allNotes.length.toString().padLeft(2, '0')),
-                      const SizedBox(width: 12),
                       _buildFilterTab('In Progress', _allNotes.where((n) => n['status'] == 'In Progress').length.toString().padLeft(2, '0')),
-                      const SizedBox(width: 12),
                       _buildFilterTab('On Hold', _allNotes.where((n) => n['status'] == 'On Hold').length.toString().padLeft(2, '0')),
                     ],
                   ),
@@ -155,8 +164,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   final note = _filteredNotes[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: _buildNoteCard(note),
-                  );
+                      child: Material(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(16),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            _openEdit(note);
+                          },
+                          child: _buildNoteCard(note),
+                        ),
+                      ),
+                    );
                 },
               ),
             ),
@@ -166,7 +185,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // Bottom Navigation Bar
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFFF9F8FD),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -238,18 +257,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Progress')),
-                        );
+                        if (_filteredNotes.isNotEmpty) {
+                          _openEdit(_filteredNotes.first);
+                        }
                       },
                       icon: const Icon(
-                        Icons.calendar_today,
+                        Icons.edit,
                         color: Colors.grey,
                         size: 28,
                       ),
                     ),
                     const Text(
-                      'Progress',
+                      'Edit',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
